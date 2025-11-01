@@ -223,8 +223,12 @@ const Index = () => {
                         <TableCell className="text-right text-gray-600">{material.minStock}</TableCell>
                         <TableCell className="text-right font-medium">{material.price} ₽</TableCell>
                         <TableCell>
-                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                            {material.status}
+                          <Badge className={
+                            material.currentStock <= material.minStock 
+                              ? "bg-orange-100 text-orange-800 hover:bg-orange-100" 
+                              : "bg-green-100 text-green-800 hover:bg-green-100"
+                          }>
+                            {material.currentStock <= material.minStock ? 'НИЗКИЙ ЗАПАС' : material.status}
                           </Badge>
                         </TableCell>
                       </TableRow>
