@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Get products list",
+      "method": "GET",
+      "path": "/?table=products",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "products": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get material consumption history",
+      "method": "GET",
+      "path": "/?table=material_consumption",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "consumptions": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
