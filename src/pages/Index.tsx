@@ -56,8 +56,8 @@ const Index = () => {
     },
     {
       id: 5,
-      name: 'Гель-лак',
-      description: 'Красного цвета',
+      name: 'Крем после бритья',
+      description: 'Успокаивающий',
       currentStock: 7,
       minStock: 2,
       price: 450,
