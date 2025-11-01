@@ -225,10 +225,10 @@ const Index = () => {
                         <TableCell>
                           <Badge className={
                             material.currentStock <= material.minStock 
-                              ? "bg-orange-100 text-orange-800 hover:bg-orange-100" 
-                              : "bg-green-100 text-green-800 hover:bg-green-100"
+                              ? "bg-gradient-to-r from-red-100 to-orange-100 text-red-700 hover:from-red-100 hover:to-orange-100 font-semibold shadow-sm" 
+                              : "bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 hover:from-green-100 hover:to-emerald-100 font-semibold shadow-sm"
                           }>
-                            {material.currentStock <= material.minStock ? 'НИЗКИЙ ЗАПАС' : material.status}
+                            {material.currentStock <= material.minStock ? '⚠️ НИЗКИЙ ЗАПАС' : '✓ ' + material.status}
                           </Badge>
                         </TableCell>
                       </TableRow>
