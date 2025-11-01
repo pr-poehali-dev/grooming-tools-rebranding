@@ -43,13 +43,30 @@ const Index = () => {
   const [isConsumeDialogOpen, setIsConsumeDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedMaterial, setSelectedMaterial] = useState<number | null>(null);
+  const [showLowStockAlert, setShowLowStockAlert] = useState(false);
   const { toast } = useToast();
 
   const fetchMaterials = async () => {
     try {
       const response = await fetch(`${API_URL}?table=products`);
       const data = await response.json();
-      setMaterials(data.products || []);
+      const loadedMaterials = data.products || [];
+      setMaterials(loadedMaterials);
+      
+      // Проверка на низкий запас и показ уведомления
+      const lowStockItems = loadedMaterials.filter(
+        (item: Material) => item.current_stock <= item.min_stock
+      );
+      
+      if (lowStockItems.length > 0) {
+        setShowLowStockAlert(true);
+        toast({
+          title: '⚠️ Внимание! Низкий запас материалов',
+          description: `Обнаружены материалы с низким запасом: ${lowStockItems.map((item: Material) => item.name).join(', ')}`,
+          variant: 'destructive',
+          duration: 8000
+        });
+      }
     } catch (error) {
       toast({
         title: 'Ошибка',
@@ -159,6 +176,8 @@ const Index = () => {
     );
   }
 
+  const lowStockMaterials = materials.filter(item => item.current_stock <= item.min_stock);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
       <div className="container mx-auto px-4 py-8">
@@ -168,6 +187,41 @@ const Index = () => {
           </h1>
           <p className="text-gray-600">Управление складом и запасами</p>
         </div>
+
+        {showLowStockAlert && lowStockMaterials.length > 0 && (
+          <Card className="mb-6 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-orange-300 shadow-lg">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3">
+                  <Icon name="AlertTriangle" className="text-orange-600 mt-1" size={24} />
+                  <div>
+                    <CardTitle className="text-lg text-gray-900 mb-2">
+                      ⚠️ Внимание! Низкий запас материалов
+                    </CardTitle>
+                    <p className="text-sm text-gray-700 mb-3">
+                      Обнаружены материалы с низким запасом:
+                    </p>
+                    <ul className="space-y-1">
+                      {lowStockMaterials.map(item => (
+                        <li key={item.id} className="text-sm text-gray-800 font-medium">
+                          • {item.name} (ID: {item.id}) - осталось {item.current_stock} {item.unit} из минимум {item.min_stock}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowLowStockAlert(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <Icon name="X" size={18} />
+                </Button>
+              </div>
+            </CardHeader>
+          </Card>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow">
