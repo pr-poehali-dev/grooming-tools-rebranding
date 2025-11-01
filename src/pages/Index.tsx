@@ -290,7 +290,14 @@ const Index = () => {
                   </TableHeader>
                   <TableBody>
                     {materials.map((material) => (
-                      <TableRow key={material.id} className="hover:bg-gray-50">
+                      <TableRow 
+                        key={material.id} 
+                        className={
+                          material.name === 'Перчатки' 
+                            ? 'bg-red-50 hover:bg-red-100' 
+                            : 'hover:bg-gray-50'
+                        }
+                      >
                         <TableCell className="font-medium">{material.id}</TableCell>
                         <TableCell className="font-medium">{material.name}</TableCell>
                         <TableCell className="text-gray-600">{material.description}</TableCell>
